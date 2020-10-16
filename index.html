@@ -6,20 +6,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Memory Game</title>
     <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
     <div class="game">
-        <div id="gameGrid"></div>
+        <div class="scoreBoard">
+
+            <div class="tileNum">
+                <p id="tileNumLabel"> tiles </p>
+                <p id="tileNumValue"> 4 </p>
+            </div>
+
+            <div class="trialNum">
+                <p id="trialNumLabel"> Trial </p>
+                <p id="trialNumValue"> 4 out 7 </p>
+            </div>
+
+            <div class="score">
+                <p id="scoreLabel"> score </p>
+                <p id="scoreValue"> 0 </p>
+            </div>
+
+        </div>
+        <div class="gameBoard">
+            <div id="gameGrid"></div>
+        </div>
     </div>
-    
+
 
     <script src="./script.js"></script>
-    <script> 
+    <script>
         let game = new Game();
         game.startGame();
-    
+
     </script>
 
 </body>
