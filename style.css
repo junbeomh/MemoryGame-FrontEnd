@@ -5,7 +5,8 @@
 
 body {
     margin: 0 auto;
-    background-color: black;
+    background-color: #c5c5c5;
+    font-family: 'Rubik', sans-serif;
 }
 
 .game {
@@ -17,11 +18,84 @@ body {
     align-items: center;
 }
 
-.game-rotated {
+.scoreBoard{
+    display: flex;
+    /* align-self: flex-start; */
+    top: 0;
+    /* right: 0; */
+    position: absolute;
+    text-transform: uppercase;
+}
+
+.tileNum {
+    display: flex;
+    padding: 10px;
+    border: 2px solid white;
+}
+
+#tileNumLabel, #tileNumValue {
+    width: 50px;
+}
+
+#tileNumLabel {
+    text-align: left;
+}
+
+#tileNumValue{
+    text-align: end;
+}
+
+.trialNum{
+    display: flex;
+    padding: 10px;
+    border: 2px solid white;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+#trialNumLabe, #trialNumValue {
+    width: 90px;
+}
+
+#trialNumLabe {
+    text-align: left;
+}
+
+#trialNumValue{
+    text-align: end;
+}
+
+.score{
+    display: flex;
+    padding: 10px;
+    border: 2px solid white;
+}
+
+#scoreLabel, #scoreValue {
+    width: 80px;
+}
+
+#scoreLabel {
+    text-align: left;
+}
+
+#scoreValue{
+    text-align: end;
+}
+
+.gameBoard{
+    padding: 30px;
+    border: 3px solid white;
+    display: flex;
+}
+
+.gameBoard.roated {
     animation-name: rotate;
     animation-duration: 2s;
     animation-fill-mode: forwards;
 }
+
+
 
 @keyframes rotate {
     to {
@@ -34,18 +108,24 @@ body {
 }
 
 .col {
+    cursor: pointer;
+    transform-style: preserve-3D;
     display: inline-block;
     width: 100px;
     height: 100px;
     margin: 1px;
     background-color: #ffffff80;
     transition: background-color 0.2s;
+    transition: transform 1s;
+    transform-origin: center center;
 }
 
 .col.correct {
     background-color: green;
+    transform: rotateY(180deg);
 }
 
 .col.wrong {
     background-color: red;
+    transform: rotateY(180deg);
 }
