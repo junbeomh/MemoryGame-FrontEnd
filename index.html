@@ -12,34 +12,35 @@
 <body>
 
     <div class="game">
-        <div class="scoreBoard">
 
+        <div class="scoreBoard">
             <div class="tileNum">
                 <p id="tileNumLabel"> tiles </p>
-                <p id="tileNumValue"> 4 </p>
+                <p id="tileNumValue"> 3 </p>
             </div>
 
             <div class="trialNum">
                 <p id="trialNumLabel"> Trial </p>
-                <p id="trialNumValue"> 4 out 7 </p>
+                <p id="trialNumValue"> 1 &nbsp; of &nbsp; 7 </p>
             </div>
 
             <div class="score">
                 <p id="scoreLabel"> score </p>
                 <p id="scoreValue"> 0 </p>
             </div>
-
         </div>
+
         <div class="gameBoard">
             <div id="gameGrid"></div>
         </div>
+
     </div>
 
-
+    <script src="./level.js"></script>
     <script src="./script.js"></script>
     <script>
         let game = new Game();
-        game.startGame();
+        game.beginGameRound();
 
     </script>
 

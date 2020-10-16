@@ -1,10 +1,14 @@
 class Game {
     constructor() {
-        this.score = 0;
-        this.x = 4;
-        this.y = 3;
-        this.numbAnswers = 4;
         this.grid = [];
+        this.totalScore = 0;
+        this.roundScore = 0;
+        this.level = new Level(level);
+        this.currLevel = 0;
+        this.x = 3;
+        this.y = 3;
+        this.numbAnswers = 3;
+        this.isError = true;
     }
 
     makeGrid = () => {
@@ -15,7 +19,7 @@ class Game {
             row.className = "row";
             for (let x = 0; x < this.x; x++) {
                 const col = document.createElement("div");
-                col.onclick = () => this.handleClick(col, y, x);
+                col.onclick = () => this.tileClick(col, y, x);
                 col.id = `${y}-${x}`;
                 col.className = "col";
                 row.appendChild(col);
@@ -64,27 +68,86 @@ class Game {
     }
 
     previewAnswers = () => {
-        const gameGrid = document.getElementById('gameGrid');
-        gameGrid.className = "game game-rotated";
+        const gameBoard = document.getElementsByClassName('gameBoard');
+        let answers = [];
+
+        // Show answers
+        for (let y = 0; y < this.y; y++) {
+            for (let x = 0; x < this.x; x++) {
+                let colId = `${y}-${x}`;
+                let col = document.getElementById(colId);
+                if (this.grid[y][x] === 1) {
+                    col.className = "col correct";
+                    answers.push(col);
+                }
+            }
+        }
+        console.log('showing answers');
+
+        // Hide answers
+        setTimeout(function () {
+            for (const col of answers) {
+                col.className = "col"
+            }
+            console.log('hiding answers');
+        }, 2000);
+
+
+        // Rotate board 
+        setTimeout(function () {
+            gameBoard.className = "rotate";
+            console.log('rotating board');
+        }, 3000);
     }
 
 
-    handleClick = (col, y, x) => {
-        console.log(col.id);
-
+    tileClick = (col, y, x) => {
         //compare grid[y][x] to col[y][x]
         if (this.grid[y][x] === 1) {
+            this.totalScore++;
             col.className = "col correct";
             console.log('picked correct answer');
         } else {
+            this.totalScore--;
             col.className = "col wrong";
             console.log('picked wrong answer');
         }
+        document.getElementById("scoreValue").innerHTML = this.totalScore;
     }
 
-    startGame = () => {
+    beginGameRound = () => {
         this.makeGrid();
         this.fillGridAnswers();
         this.previewAnswers();
+        console.log(this.level);
+        console.log(this.x);
+        console.log(this.y);
+        console.log(this.numbAnswers);
+        this.currLevel++;
+        this.x = this.level[this.currLevel].x;
+        this.y = this.level[this.currLevel].y;
+        this.numbAnswers = this.level[this.currLevel].answers;
+        console.log(this.x);
+        console.log(this.y);
+        console.log(this.numbAnswers);
+
     }
 }
+
+const level = [
+    {
+        x: 3,
+        y: 3,
+        answers: 3,
+    },
+    {
+        x: 4,
+        y: 3,
+        answers: 4,
+    },
+    {
+        'x': 4,
+        'y': 4,
+        answers: 5,
+    },
+];
