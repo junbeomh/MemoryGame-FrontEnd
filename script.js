@@ -4,11 +4,20 @@ class Game {
         this.totalScore = 0;
         this.roundScore = 0;
         this.level = new Level(level);
+        this.maxLevel = 8;
         this.currLevel = 0;
         this.x = 3;
         this.y = 3;
         this.numbAnswers = 3;
-        this.isError = true;
+        this.levelClear = false;
+        this.mistake = false;
+    }
+
+    clearGrid = () => {
+        this.roundScore = 0;
+        const gameGrid = document.getElementById("gameGrid");
+        gameGrid.innerHTML = "";
+
     }
 
     makeGrid = () => {
@@ -28,6 +37,8 @@ class Game {
         }
         console.log(`made ${this.x}x${this.y} grid`);
     }
+
+
 
     fillGridAnswers = () => {
         let gridArray = [];
@@ -82,22 +93,22 @@ class Game {
                 }
             }
         }
-        console.log('showing answers');
+        // console.log('showing answers');
 
         // Hide answers
         setTimeout(function () {
             for (const col of answers) {
                 col.className = "col"
             }
-            console.log('hiding answers');
+            // console.log('hiding answers');
         }, 2000);
 
 
         // Rotate board 
-        setTimeout(function () {
-            gameBoard.className = "rotate";
-            console.log('rotating board');
-        }, 3000);
+        // setTimeout(function () {
+        //     gameBoard.className = "rotate";
+        //     // console.log('rotating board');
+        // }, 3000);
     }
 
 
@@ -105,32 +116,45 @@ class Game {
         //compare grid[y][x] to col[y][x]
         if (this.grid[y][x] === 1) {
             this.totalScore++;
+            this.roundScore++;
             col.className = "col correct";
-            console.log('picked correct answer');
+            if (this.numbAnswers == this.roundScore) {
+                this.mistake ? this.levelClear = false : this.levelClear = true;
+                setTimeout(() => { this.beginGameRound(); }, 3000);
+            }
         } else {
+            this.mistake = true;
+            this.levelClear = false;
             this.totalScore--;
             col.className = "col wrong";
-            console.log('picked wrong answer');
         }
         document.getElementById("scoreValue").innerHTML = this.totalScore;
     }
 
     beginGameRound = () => {
-        this.makeGrid();
-        this.fillGridAnswers();
-        this.previewAnswers();
-        console.log(this.level);
-        console.log(this.x);
-        console.log(this.y);
-        console.log(this.numbAnswers);
-        this.currLevel++;
+        if (this.currLevel === this.maxLevel) {
+            // highscore board 
+        } else {
+            console.log(this.levelClear);
+            if (!this.levelClear) {
+                if (this.currLevel > 0) {
+                    this.currLevel--;
+                }
+            } else {
+                this.currLevel++;
+            }
+        }
+        this.mistake= false;
         this.x = this.level[this.currLevel].x;
         this.y = this.level[this.currLevel].y;
         this.numbAnswers = this.level[this.currLevel].answers;
-        console.log(this.x);
-        console.log(this.y);
-        console.log(this.numbAnswers);
-
+        this.clearGrid();
+        this.makeGrid();
+        this.fillGridAnswers();
+        this.previewAnswers();
+        console.log("x: ", this.x);
+        console.log("y: ", this.y);
+        console.log("answers: ", this.numbAnswers);
     }
 }
 
@@ -149,5 +173,30 @@ const level = [
         'x': 4,
         'y': 4,
         answers: 5,
+    },
+    {
+        'x': 4,
+        'y': 5,
+        answers: 6,
+    },
+    {
+        'x': 5,
+        'y': 5,
+        answers: 7,
+    },
+    {
+        'x': 6,
+        'y': 6,
+        answers: 8,
+    },
+    {
+        'x': 6,
+        'y': 7,
+        answers: 9,
+    },
+    {
+        'x': 7,
+        'y': 7,
+        answers: 10,
     },
 ];
