@@ -1,15 +1,15 @@
 class Game {
     constructor() {
-        this.level = new Level(level);
-        this.x = 3;
-        this.y = 3;
         this.grid = [];
         this.answers = [];
         this.totalScore = 0;
         this.roundScore = 0;
         this.currRound = 0;
         this.totalRounds = 11;
+        this.level = new Level(level);
         this.currLevelIndex = 0;
+        this.x = 3;
+        this.y = 3;
         this.totalClick = 0;
         this.numbAnswers = 3;
         this.levelClear = false;
@@ -60,8 +60,11 @@ class Game {
             let x = tile % this.x;
             let y = Math.floor(tile / this.x);
             gridArray[y][x] = 1;
+            let colId = `${y}-${x}`;
+            let col = document.getElementById(colId);
+            this.answers.push(col);
         })
-        console.log(gridArray);
+
         this.grid = gridArray;
     }
 
@@ -80,40 +83,6 @@ class Game {
         return answerArray;
     }
 
-    previewAnswers = () => {
-        const gameBoard = document.getElementsByClassName('gameBoard')[0];
-        let answers = [];
-
-        // Show answers
-        for (let y = 0; y < this.y; y++) {
-            for (let x = 0; x < this.x; x++) {
-                let colId = `${y}-${x}`;
-                let col = document.getElementById(colId);
-                if (this.grid[y][x] === 1) {
-                    col.className = "col correct";
-                    answers.push(col);
-                    this.answers.push(col.id);
-                }
-            }
-        }
-
-
-        // Hide answers
-        setTimeout(function () {
-            for (const col of answers) {
-                col.className = "col"
-            }
-            // console.log('hiding answers');
-        }, 2000);
-        this
-
-        // Rotate board 
-        setTimeout(function () {
-            gameBoard.className = "gameBoard rotate";
-            // console.log('rotating board');
-        }, 2000);
-    }
-
     renderTiles = () => {
         // Show answers
         for (let y = 0; y < this.y; y++) {
@@ -125,12 +94,34 @@ class Game {
         }
     }
 
+    previewAnswers = () => {
+        const gameBoard = document.getElementsByClassName('gameBoard')[0];
+
+        // Show answers
+        this.showAnswers();
+
+
+        // Hide answers
+        setTimeout(() => { this.hideAnswers(); }, 1500);
+
+
+        // Rotate board 
+        setTimeout(function () {
+            gameBoard.className = "gameBoard rotate";
+            // console.log('rotating board');
+        }, 2000);
+    }
+
+
     showAnswers = () => {
-        console.log(this.answers);
         for (const answer of this.answers) {
-            let col = document.getElementById(answer)
-            console.log(col)
-            col.className = "col correct"
+            answer.className = "col correct"
+        }
+    }
+
+    hideAnswers = () => {
+        for (const answer of this.answers) {
+            answer.className = "col"
         }
     }
 
@@ -143,9 +134,9 @@ class Game {
         let colId = `${y}-${x}`;
         this.totalClick++;
 
+        //compare grid[y][x] to col[y][x]
         if (this.grid[y][x] === 1) {
             let index = this.answers.indexOf(colId);
-
 
             this.answers.splice(index, 1);
             this.roundScore++;
@@ -172,9 +163,9 @@ class Game {
             }
             gameGrid.style.pointerEvents = "none";
             if (this.answers.length != 0) {
-                setTimeout(() => { this.showAnswers(); }, 1000);
+                setTimeout(() => { this.showAnswers(); }, 800);
             }
-            setTimeout(() => { this.beginGameRound(); }, 3200);
+            setTimeout(() => { this.beginGameRound(); }, 3000);
         }
 
         gameMessage.innerHTML = `Keep Clicking. You can uncover ${this.numbAnswers - this.totalClick} more tiles.`;
