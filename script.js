@@ -3,25 +3,31 @@ class Game {
         this.grid = [];
         this.totalScore = 0;
         this.roundScore = 0;
+        this.currRound = 0;
+        this.totalRounds = 11;
         this.level = new Level(level);
-        this.maxLevel = 8;
-        this.currLevel = 0;
+        this.currLevelIndex = 0;
         this.x = 3;
         this.y = 3;
+        this.totalClick = 0;
         this.numbAnswers = 3;
         this.levelClear = false;
         this.mistake = false;
+        this.isStarted = false;
     }
 
     clearGrid = () => {
-        this.roundScore = 0;
         const gameGrid = document.getElementById("gameGrid");
+        const gameMessage = document.getElementById("gameMessage");
+        this.roundScore = 0;
+        this.totalClick = 0;
         gameGrid.innerHTML = "";
-
+        gameMessage.style.visibility = "hidden";
     }
 
     makeGrid = () => {
         const gameGrid = document.getElementById("gameGrid");
+        gameGrid.className = "gameGrid disableClick"
         for (let y = 0; y < this.y; y++) {
             const row = document.createElement("div");
             row.id = `row${y}`;
@@ -30,15 +36,12 @@ class Game {
                 const col = document.createElement("div");
                 col.onclick = () => this.tileClick(col, y, x);
                 col.id = `${y}-${x}`;
-                col.className = "col";
+                col.className = "col invisible";
                 row.appendChild(col);
             }
             gameGrid.appendChild(row);
         }
-        console.log(`made ${this.x}x${this.y} grid`);
     }
-
-
 
     fillGridAnswers = () => {
         let gridArray = [];
@@ -52,11 +55,8 @@ class Game {
 
         let answers = this.pickRandomTiles(this.y * this.x, this.numbAnswers);
         answers.forEach((tile) => {
-            console.log(`tile: ${tile}`);
             let x = tile % this.x;
             let y = Math.floor(tile / this.x);
-            // console.log(`x: ${x}`);
-            // console.log(`y: ${y}`);
             gridArray[y][x] = 1;
         })
         console.log(gridArray);
@@ -79,7 +79,7 @@ class Game {
     }
 
     previewAnswers = () => {
-        const gameBoard = document.getElementsByClassName('gameBoard');
+        const gameBoard = document.getElementsByClassName('gameBoard')[0];
         let answers = [];
 
         // Show answers
@@ -93,7 +93,7 @@ class Game {
                 }
             }
         }
-        // console.log('showing answers');
+
 
         // Hide answers
         setTimeout(function () {
@@ -105,56 +105,100 @@ class Game {
 
 
         // Rotate board 
-        // setTimeout(function () {
-        //     gameBoard.className = "rotate";
-        //     // console.log('rotating board');
-        // }, 3000);
+        setTimeout(function () {
+            gameBoard.className = "gameBoard rotate";
+            // console.log('rotating board');
+        }, 2000);
+    }
+
+    renderTiles = () => {
+        // Show answers
+        for (let y = 0; y < this.y; y++) {
+            for (let x = 0; x < this.x; x++) {
+                let colId = `${y}-${x}`;
+                let col = document.getElementById(colId);
+                col.className = "col";
+            }
+        }
     }
 
 
     tileClick = (col, y, x) => {
+        const gameGrid = document.getElementById("gameGrid");
+        const gameMessage = document.getElementById("gameMessage");
+        const gameScore = document.getElementById("scoreValue");
+        this.totalClick++;
+
         //compare grid[y][x] to col[y][x]
         if (this.grid[y][x] === 1) {
-            this.totalScore++;
             this.roundScore++;
+            this.totalScore++;
             col.className = "col correct";
-            if (this.numbAnswers == this.roundScore) {
-                this.mistake ? this.levelClear = false : this.levelClear = true;
-                setTimeout(() => { this.beginGameRound(); }, 3000);
-            }
+
         } else {
             this.mistake = true;
             this.levelClear = false;
             this.totalScore--;
             col.className = "col wrong";
         }
-        document.getElementById("scoreValue").innerHTML = this.totalScore;
+
+        // decide when round ends 
+        if (this.totalClick == this.numbAnswers) {
+            if (this.mistake) {
+                this.levelClear = false;
+            } else {
+                this.levelClear = true;
+                setTimeout(() => {
+                    this.totalScore += this.numbAnswers;
+
+                }, 1000);
+            }
+            gameGrid.style.pointerEvents = "none";
+            setTimeout(() => { this.beginGameRound(); }, 3000);
+        }
+
+        gameMessage.innerHTML = `Keep Clicking. You can uncover ${this.numbAnswers - this.totalClick} more tiles.`;
+        gameMessage.style.visibility = "visible";
+        gameScore.innerHTML = this.totalScore;
     }
 
+
     beginGameRound = () => {
-        if (this.currLevel === this.maxLevel) {
+        const tiles = document.getElementById('tileNumValue');
+        const gameGrid = document.getElementById("gameGrid");
+        const trials = document.getElementById('trialNumValue');
+        const maxLevelIndex = Object.keys(this.level).length - 1;
+        trials.innerHTML = `${this.currRound + 1} &nbsp; of &nbsp;  ${this.totalRounds + 1} `;
+
+
+        if (this.currRound === this.totalRounds) {
+            console.log("MAX LEVEL")
             // highscore board 
         } else {
-            console.log(this.levelClear);
             if (!this.levelClear) {
-                if (this.currLevel > 0) {
-                    this.currLevel--;
+                if (this.currLevelIndex > 0 && this.isStarted) {
+                    this.currLevelIndex--;
                 }
             } else {
-                this.currLevel++;
+                this.currLevelIndex == maxLevelIndex ? this.currLevelIndex = maxLevelIndex : this.currLevelIndex++;
             }
+
+
+            this.isStarted = true;
+            this.mistake = false;
+            this.x = this.level[this.currLevelIndex].x;
+            this.y = this.level[this.currLevelIndex].y;
+            this.numbAnswers = this.level[this.currLevelIndex].answers;
+            tiles.innerHTML = this.numbAnswers;
+            this.clearGrid();
+            this.makeGrid();
+            this.fillGridAnswers();
+            setTimeout(() => this.renderTiles(), 1000);
+            setTimeout(() => this.previewAnswers(), 2000);
+            setTimeout(() => gameGrid.style.pointerEvents = "auto", 5000);
+            document.getElementsByClassName('gameBoard')[0].className = "gameBoard";
+            this.currRound++;
         }
-        this.mistake= false;
-        this.x = this.level[this.currLevel].x;
-        this.y = this.level[this.currLevel].y;
-        this.numbAnswers = this.level[this.currLevel].answers;
-        this.clearGrid();
-        this.makeGrid();
-        this.fillGridAnswers();
-        this.previewAnswers();
-        console.log("x: ", this.x);
-        console.log("y: ", this.y);
-        console.log("answers: ", this.numbAnswers);
     }
 }
 
@@ -175,8 +219,8 @@ const level = [
         answers: 5,
     },
     {
-        'x': 4,
-        'y': 5,
+        'x': 5,
+        'y': 4,
         answers: 6,
     },
     {
@@ -186,17 +230,22 @@ const level = [
     },
     {
         'x': 6,
-        'y': 6,
+        'y': 5,
         answers: 8,
     },
     {
         'x': 6,
-        'y': 7,
+        'y': 6,
         answers: 9,
     },
     {
         'x': 7,
-        'y': 7,
+        'y': 6,
         answers: 10,
+    },
+    {
+        'x': 7,
+        'y': 7,
+        answers: 11,
     },
 ];
