@@ -1,14 +1,15 @@
 class Game {
     constructor() {
+        this.level = new Level(level);
+        this.x = 3;
+        this.y = 3;
         this.grid = [];
+        this.answers = [];
         this.totalScore = 0;
         this.roundScore = 0;
         this.currRound = 0;
         this.totalRounds = 11;
-        this.level = new Level(level);
         this.currLevelIndex = 0;
-        this.x = 3;
-        this.y = 3;
         this.totalClick = 0;
         this.numbAnswers = 3;
         this.levelClear = false;
@@ -19,6 +20,7 @@ class Game {
     clearGrid = () => {
         const gameGrid = document.getElementById("gameGrid");
         const gameMessage = document.getElementById("gameMessage");
+        this.answers = [];
         this.roundScore = 0;
         this.totalClick = 0;
         gameGrid.innerHTML = "";
@@ -90,6 +92,7 @@ class Game {
                 if (this.grid[y][x] === 1) {
                     col.className = "col correct";
                     answers.push(col);
+                    this.answers.push(col.id);
                 }
             }
         }
@@ -102,7 +105,7 @@ class Game {
             }
             // console.log('hiding answers');
         }, 2000);
-
+        this
 
         // Rotate board 
         setTimeout(function () {
@@ -122,15 +125,29 @@ class Game {
         }
     }
 
+    showAnswers = () => {
+        console.log(this.answers);
+        for (const answer of this.answers) {
+            let col = document.getElementById(answer)
+            console.log(col)
+            col.className = "col correct"
+        }
+    }
+
+
 
     tileClick = (col, y, x) => {
         const gameGrid = document.getElementById("gameGrid");
         const gameMessage = document.getElementById("gameMessage");
         const gameScore = document.getElementById("scoreValue");
+        let colId = `${y}-${x}`;
         this.totalClick++;
 
-        //compare grid[y][x] to col[y][x]
         if (this.grid[y][x] === 1) {
+            let index = this.answers.indexOf(colId);
+
+
+            this.answers.splice(index, 1);
             this.roundScore++;
             this.totalScore++;
             col.className = "col correct";
@@ -148,13 +165,16 @@ class Game {
                 this.levelClear = false;
             } else {
                 this.levelClear = true;
-                setTimeout(() => {
-                    this.totalScore += this.numbAnswers;
+                // setTimeout(() => {
+                this.totalScore += this.numbAnswers;
 
-                }, 1000);
+                // }, 1000);
             }
             gameGrid.style.pointerEvents = "none";
-            setTimeout(() => { this.beginGameRound(); }, 3000);
+            if (this.answers.length != 0) {
+                setTimeout(() => { this.showAnswers(); }, 1000);
+            }
+            setTimeout(() => { this.beginGameRound(); }, 3200);
         }
 
         gameMessage.innerHTML = `Keep Clicking. You can uncover ${this.numbAnswers - this.totalClick} more tiles.`;
