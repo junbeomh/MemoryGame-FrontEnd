@@ -7,6 +7,7 @@
     <title>Memory Game</title>
     <link rel="stylesheet" href="./style.css">
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap" rel="stylesheet">
+    <script src="http://code.jquery.com/jquery.js"></script>
 </head>
 
 <body>
@@ -16,7 +17,7 @@
         <div class="scoreBoard">
             <div class="tileNum">
                 <p id="tileNumLabel"> tiles </p>
-                <p id="tileNumValue">  </p>
+                <p id="tileNumValue"> </p>
             </div>
 
             <div class="trialNum">
@@ -29,33 +30,37 @@
                 <p id="scoreValue"> 0 </p>
             </div>
             <div>
-                <div> Terminate </div>
+                <div id="terminate"> Terminate </div>
             </div>
 
         </div>
 
-        <div class="gameBoard">
+
+        <!-- <div class="gameBoard">
             <div id="gameGrid"> </div>
         </div>
-        
-        <div id="gameMessage"> Keep Clicking. You can uncover 4 more tiles. </div>
 
+        <div id="gameMessage"> </div> -->
 
-
-        <div class="scoreBoard">
-            <div id="scoreList">
-
-            </div>
+        <div id="gameDashboard">
+            <div class="start"> </div>
+            <object type="text/html" id="gameSummary"  data="summary.html"></object>
+            <!-- <object type="text/html" id="gameLeaderboard" data="leaderboard.html"></object> -->
         </div>
 
-
     </div>
+
 
     <script src="./level.js"></script>
     <script src="./script.js"></script>
     <script>
-        let game = new Game();
-        game.beginGameRound();
+        // let game = new Game();
+        // game.beginGameRound();
+
+        $("div#terminate").on("click", function () {
+            console.log('pressed terminate');
+            // document.getElementById("gameDashboard").innerHTML = '<object type="text/html" data="leaderboard.html" ></object>';
+        });
 
     </script>
 
