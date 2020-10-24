@@ -5,28 +5,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
+    <script src="./level.js"></script>
+    <script src="./script.js"></script>
     <title>Summary</title>
 </head>
 
 <body>
-    <div class="summary-wrapper">
-        <div id="summary">
-            <h2>game summary</h2>
-            <h2>score </h2>
-            <h2>maxLevel </h2>
-            <div id="score"></div>
-            <label for="name"> Name: </label>
-            <input type="text">
-            <div class="myButton" id="restartBtn"> restart </div>
-            <div class="myButton" id="submitBtn"> submit </div>
-            <span class="close"> </span>
+    <div class="summary">
+        <span id="summaryTitle">game summary</span>
+        <div class="gameInfo">
+            <span id="gameScoreLabel">score </span>
+            <span id="gameScoreValue">  </span>
+            <span id="levelLabel">max Level </span>
+            <span id="levelValue"> </span>
         </div>
-
-        <!-- <div id="submitConfirm">
-            CONFIRM
-        </div> -->
-
+        <div class="summaryForm">
+            <label for="name"> Name: </label>
+            <input id="nameValue" type="text" autocomplete="off">
+        </div>
+        <div class="buttons">
+            <div class="restartBtn dialog-button"> restart </div>
+            <div class="dialog-button disabled" id="submitBtn"> submit </div>
+        </div>
     </div>
+
+    <script>
+        const input = document.querySelector('input');
+        const submitBtn = document.getElementById('submitBtn');
+
+        input.addEventListener('input', checkForInput);
+        function checkForInput(e) {
+            if (e.target.value) {
+                submitBtn.classList.remove('disabled');
+                console.log('auto');
+            } else {
+                submitBtn.classList.add('disabled');
+                console.log('none');
+            }
+        }
+    </script>
 
 </body>
 

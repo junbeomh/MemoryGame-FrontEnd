@@ -7,7 +7,15 @@
     <title>Memory Game</title>
     <link rel="stylesheet" href="./style.css">
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap" rel="stylesheet">
-    <script src="http://code.jquery.com/jquery.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+
+    <script src="./level.js"></script>
+    <script src="./script.js"></script>
+
 </head>
 
 <body>
@@ -22,47 +30,31 @@
 
             <div class="trialNum">
                 <p id="trialNumLabel"> Trial </p>
-                <p id="trialNumValue"> 1 &nbsp; of &nbsp; 7 </p>
+                <p id="trialNumValue">  </p>
             </div>
 
             <div class="score">
                 <p id="scoreLabel"> score </p>
-                <p id="scoreValue"> 0 </p>
+                <div id="scoreValue"> </div>
             </div>
-            <div>
-                <div id="terminate"> Terminate </div>
-            </div>
+            <div id="quitBtn"> quit </div>
 
         </div>
 
 
-        <!-- <div class="gameBoard">
+        <div class="gameBoard active">
             <div id="gameGrid"> </div>
         </div>
+            <div id="gameMessage"> </div>
 
-        <div id="gameMessage"> </div> -->
-
-        <div id="gameDashboard">
-            <div class="start"> </div>
-            <object type="text/html" id="gameSummary"  data="summary.html"></object>
-            <!-- <object type="text/html" id="gameLeaderboard" data="leaderboard.html"></object> -->
-        </div>
+        <div class="gameDashboard board-active"></div>
 
     </div>
 
-
-    <script src="./level.js"></script>
-    <script src="./script.js"></script>
     <script>
-        // let game = new Game();
-        // game.beginGameRound();
-
-        $("div#terminate").on("click", function () {
-            console.log('pressed terminate');
-            // document.getElementById("gameDashboard").innerHTML = '<object type="text/html" data="leaderboard.html" ></object>';
-        });
-
+        loadIntro();
     </script>
+
 
 </body>
 
