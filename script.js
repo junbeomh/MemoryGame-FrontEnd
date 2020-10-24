@@ -31,6 +31,7 @@ class Game {
     }
 
     reset = () => {
+        this.level = new Level();
         this.grid = [];
         this.totalScore = 0;
         this.currRound = 0;
@@ -179,6 +180,7 @@ class Game {
             } else {
                 this.totalScore += this.numbAnswers;
                 this.level.currLevel === this.level.maxLevel ? currLevel = this.level.maxLevel : this.level.currLevel++;
+                this.level.currMax = this.level.currLevel;
             }
             gameGrid.style.pointerEvents = "none";
             if (this.answers.length != 0) { setTimeout(() => { this.showAnswers(); }, 1000); }
@@ -252,7 +254,7 @@ function load(page, withData) {
                 switch (page) {
                     case "./summary.html":
                         this.$content.find('#gameScoreValue').text(game.totalScore);
-                        this.$content.find('#levelValue').text(game.totalScore);
+                        this.$content.find('#levelValue').text(game.level.currMax);
 
                     case "./leaderboard.html":
                     // database action here
