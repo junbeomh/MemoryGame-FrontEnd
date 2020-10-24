@@ -1,9 +1,7 @@
 // DOM constants 
-const tiles = document.getElementById('tileNumValue');
-const trials = document.getElementById('trialNumValue');
 const gameGrid = document.getElementById("gameGrid");
 const gameMessage = document.getElementById("gameMessage");
-const gameScore = document.getElementById("scoreValue");
+const scoreBoard = document.getElementById("scoreBoard");
 const confirmQuit = document.querySelector('.confirmQuit');
 const confirmSubmit = document.querySelector('.confirmSubmit');
 const welcome = document.querySelector('.welcome');
@@ -23,7 +21,6 @@ class Game {
         this.currRound = 0;
         this.totalRounds = MAX_ROUNDS;
         this.level = new Level();
-        // this.currLevelIndex = 0;
         this.x = 3;
         this.y = 3;
         this.totalClick = 0;
@@ -38,7 +35,6 @@ class Game {
         this.totalScore = 0;
         this.currRound = 0;
         this.totalRounds = 11;
-        // this.currLevelIndex = 0;
         this.x = 3;
         this.y = 3;
         this.numbAnswers = 3;
@@ -156,6 +152,7 @@ class Game {
 
 
     tileClick = (col, y, x) => {
+        const gameScore = document.getElementById("scoreNumValue");
         this.totalClick++;
 
         //compare grid[y][x] to col[y][x]
@@ -194,6 +191,10 @@ class Game {
 
 
     beginGameRound = () => {
+        const tiles = document.getElementById('tileNumValue');
+        const trials = document.getElementById('trialNumValue');
+        const gameScore = document.getElementById("scoreNumValue");
+
         let currLevel = this.level.currLevel;
         if (this.currRound < this.totalRounds) {
             this.x = this.level.data[currLevel].x;
@@ -216,6 +217,24 @@ class Game {
         } else {
             setTimeout(() => { load('./summary.html', true); }, 1000);
         }
+    }
+}
+
+
+function renderScoreBoard(){
+    const boardTypes = ["tile", "trial", "score"];
+    let scoreboard = document.getElementById("scoreBoard");
+    for (let board of boardTypes) {
+        const boardDiv = document.createElement("div");
+        boardDiv.setAttribute("class", `${board}Num`);
+        const label = document.createElement("p");
+        label.setAttribute("id", `${board}NumLabel`);
+        label.innerHTML = `${board}`;
+        const value = document.createElement("p");
+        value.setAttribute("id", `${board}NumValue`);
+        boardDiv.appendChild(label);
+        boardDiv.appendChild(value);
+        scoreboard.appendChild(boardDiv);
     }
 }
 
@@ -254,22 +273,19 @@ function loadIntro() {
     $('.gameDashboard').load("./welcome.html");
 }
 
-
-
-
-
 // Game Events
 
 $('#startBtn').click(function () {
     welcome.classList.add('hide');
     gameDashboard.classList.remove('board-active');
+    renderScoreBoard();
     game = new Game();
-    // console.log(game.level.data);
     setTimeout(() => { game.beginGameRound(); }, 1000);
 });
 
 
 $('.restartBtn').click(function () {
+    console.log('pressed');
     game.reset();
 });
 
@@ -333,3 +349,4 @@ $('#submitBtn').confirm({
         },
     }
 });
+
