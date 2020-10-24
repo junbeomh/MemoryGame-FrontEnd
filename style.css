@@ -51,7 +51,7 @@ body {
 }
 
 #tileNumLabel, #tileNumValue {
-    width: 40px;
+    width: 50px;
 }
 
 #tileNumLabel {
@@ -84,7 +84,7 @@ body {
     text-align: end;
 }
 
-.score {
+.scoreNum {
     display: flex;
     padding: 10px;
     border: 2px solid rgba(255, 255, 255, 0.7);
@@ -93,15 +93,15 @@ body {
     transition: 0.3s;
 }
 
-#scoreLabel, #scoreValue {
+#scoreNumLabel, #scoreNumValue {
     width: 60px;
 }
 
-#scoreLabel {
+#scoreNumLabel {
     text-align: left;
 }
 
-#scoreValue {
+#scoreNumValue {
     text-align: end;
 }
 
