@@ -1,34 +1,63 @@
+// DOM constants 
+const tiles = document.getElementById('tileNumValue');
+const trials = document.getElementById('trialNumValue');
+const gameGrid = document.getElementById("gameGrid");
+const gameMessage = document.getElementById("gameMessage");
+const gameScore = document.getElementById("scoreValue");
+const confirmQuit = document.querySelector('.confirmQuit');
+const confirmSubmit = document.querySelector('.confirmSubmit');
+const welcome = document.querySelector('.welcome');
+const summary = document.querySelector('.summary');
+const leaderboard = document.querySelector('.leaderboard');
+const gameDashboard = document.querySelector('.gameDashboard');
+const gameBoard = document.getElementsByClassName('gameBoard')[0];
+
+const MAX_ROUNDS = 11;  // starting from zero
+
+
 class Game {
     constructor() {
         this.grid = [];
         this.answers = [];
         this.totalScore = 0;
-        this.roundScore = 0;
         this.currRound = 0;
-        this.totalRounds = 11;
-        this.level = new Level(level);
-        this.currLevelIndex = 0;
+        this.totalRounds = MAX_ROUNDS;
+        this.level = new Level();
+        // this.currLevelIndex = 0;
         this.x = 3;
         this.y = 3;
         this.totalClick = 0;
         this.numbAnswers = 3;
-        this.levelClear = false;
         this.mistake = false;
         this.isStarted = false;
+        this.observers = [];
+    }
+
+    reset = () => {
+        this.grid = [];
+        this.totalScore = 0;
+        this.currRound = 0;
+        this.totalRounds = 11;
+        // this.currLevelIndex = 0;
+        this.x = 3;
+        this.y = 3;
+        this.numbAnswers = 3;
+        this.mistake = false;
+        this.isStarted = false;
+        this.clearGrid();
+        setTimeout(() => { this.beginGameRound(); }, 1000);
     }
 
     clearGrid = () => {
-        const gameGrid = document.getElementById("gameGrid");
-        const gameMessage = document.getElementById("gameMessage");
         this.answers = [];
-        this.roundScore = 0;
         this.totalClick = 0;
+        this.isStarted = true;
+        this.mistake = false;
         gameGrid.innerHTML = "";
         gameMessage.style.visibility = "hidden";
     }
 
     makeGrid = () => {
-        const gameGrid = document.getElementById("gameGrid");
         gameGrid.className = "gameGrid disableClick"
         for (let y = 0; y < this.y; y++) {
             const row = document.createElement("div");
@@ -66,6 +95,7 @@ class Game {
         })
 
         this.grid = gridArray;
+        console.log(this.grid);
     }
 
     pickRandomTiles = (numbTiles, numbAnswers) => {
@@ -95,7 +125,6 @@ class Game {
     }
 
     previewAnswers = () => {
-        const gameBoard = document.getElementsByClassName('gameBoard')[0];
 
         // Show answers
         this.showAnswers();
@@ -126,48 +155,38 @@ class Game {
     }
 
 
-
     tileClick = (col, y, x) => {
-        const gameGrid = document.getElementById("gameGrid");
-        const gameMessage = document.getElementById("gameMessage");
-        const gameScore = document.getElementById("scoreValue");
-        let colId = `${y}-${x}`;
         this.totalClick++;
 
         //compare grid[y][x] to col[y][x]
         if (this.grid[y][x] === 1) {
-            let index = this.answers.indexOf(colId);
-
-            this.answers.splice(index, 1);
-            this.roundScore++;
+            this.answers = this.answers.filter((obj) => { return obj.id !== `${y}-${x}`; });
             this.totalScore++;
             col.className = "col correct";
 
         } else {
             this.mistake = true;
-            this.levelClear = false;
             this.totalScore--;
             col.className = "col wrong";
         }
 
-        // decide when round ends 
-        if (this.totalClick == this.numbAnswers) {
-            if (this.mistake) {
-                this.levelClear = false;
-            } else {
-                this.levelClear = true;
-                // setTimeout(() => {
-                this.totalScore += this.numbAnswers;
-
-                // }, 1000);
-            }
-            gameGrid.style.pointerEvents = "none";
-            if (this.answers.length != 0) {
-                setTimeout(() => { this.showAnswers(); }, 800);
-            }
-            setTimeout(() => { this.beginGameRound(); }, 3000);
+        if (this.totalScore < 0) {
+            gameDashboard.classList.add('board-active');
+            setTimeout(() => { load('./summary.html', true); }, 2000);
         }
 
+
+        if (this.totalClick == this.numbAnswers) {
+            if (this.mistake) {
+                this.level.currLevel <= 0 ? this.level.currLevel = 0 : this.level.currLevel--;
+            } else {
+                this.totalScore += this.numbAnswers;
+                this.level.currLevel === this.level.maxLevel ? currLevel = this.level.maxLevel : this.level.currLevel++;
+            }
+            gameGrid.style.pointerEvents = "none";
+            if (this.answers.length != 0) { setTimeout(() => { this.showAnswers(); }, 1000); }
+            setTimeout(() => { this.beginGameRound(); }, 1500);
+        }
         gameMessage.innerHTML = `Keep Clicking. You can uncover ${this.numbAnswers - this.totalClick} more tiles.`;
         gameMessage.style.visibility = "visible";
         gameScore.innerHTML = this.totalScore;
@@ -175,32 +194,11 @@ class Game {
 
 
     beginGameRound = () => {
-        const tiles = document.getElementById('tileNumValue');
-        const gameGrid = document.getElementById("gameGrid");
-        const trials = document.getElementById('trialNumValue');
-        const maxLevelIndex = Object.keys(this.level).length - 1;
-        trials.innerHTML = `${this.currRound + 1} &nbsp; of &nbsp;  ${this.totalRounds + 1} `;
-
-
-        if (this.currRound === this.totalRounds) {
-            console.log("MAX LEVEL")
-            // highscore board 
-        } else {
-            if (!this.levelClear) {
-                if (this.currLevelIndex > 0 && this.isStarted) {
-                    this.currLevelIndex--;
-                }
-            } else {
-                this.currLevelIndex == maxLevelIndex ? this.currLevelIndex = maxLevelIndex : this.currLevelIndex++;
-            }
-
-
-            this.isStarted = true;
-            this.mistake = false;
-            this.x = this.level[this.currLevelIndex].x;
-            this.y = this.level[this.currLevelIndex].y;
-            this.numbAnswers = this.level[this.currLevelIndex].answers;
-            tiles.innerHTML = this.numbAnswers;
+        let currLevel = this.level.currLevel;
+        if (this.currRound < this.totalRounds) {
+            this.x = this.level.data[currLevel].x;
+            this.y = this.level.data[currLevel].y;
+            this.numbAnswers = this.level.data[currLevel].answers;
             this.clearGrid();
             this.makeGrid();
             this.fillGridAnswers();
@@ -208,55 +206,130 @@ class Game {
             setTimeout(() => this.previewAnswers(), 2000);
             setTimeout(() => gameGrid.style.pointerEvents = "auto", 5000);
             document.getElementsByClassName('gameBoard')[0].className = "gameBoard";
-            this.currRound++;
+
+            tiles.innerHTML = this.numbAnswers;
+            trials.innerHTML = `${this.currRound + 1} &nbsp; of &nbsp;  ${this.totalRounds + 1} `;
+            gameScore.innerHTML = this.totalScore < 0 ? this.totalScore = 0 : this.totalScore;
+
+            this.currRound > this.totalRounds ? this.currRound = this.totalRounds : this.currRound++;
+
+        } else {
+            setTimeout(() => { load('./summary.html', true); }, 1000);
         }
     }
 }
 
-const level = [
-    {
-        x: 3,
-        y: 3,
-        answers: 3,
-    },
-    {
-        x: 4,
-        y: 3,
-        answers: 4,
-    },
-    {
-        'x': 4,
-        'y': 4,
-        answers: 5,
-    },
-    {
-        'x': 5,
-        'y': 4,
-        answers: 6,
-    },
-    {
-        'x': 5,
-        'y': 5,
-        answers: 7,
-    },
-    {
-        'x': 6,
-        'y': 5,
-        answers: 8,
-    },
-    {
-        'x': 6,
-        'y': 6,
-        answers: 9,
-    },
-    {
-        'x': 7,
-        'y': 6,
-        answers: 10,
-    },
-    {
-        'x': 7,
-        'y': 7,
-        answers: 11,
-    },
-];
+
+
+function load(page, withData) {
+    gameDashboard.classList.add('board-active');
+    var dialog = $.dialog({
+        type: 'blue',
+        closeIcon: false,
+        title: false,
+        content: `url:${page}`,
+        onContentReady: function () {
+            if (withData) {
+                switch (page) {
+                    case "./summary.html":
+                        this.$content.find('#gameScoreValue').text(game.totalScore);
+                        this.$content.find('#levelValue').text(game.totalScore);
+
+                    case "./leaderboard.html":
+                    // database action here
+                }
+            }
+            this.$content.find('.restartBtn').click(function () {
+                gameDashboard.classList.remove('board-active');
+                dialog.close();
+            });
+            this.$content.find('#submitBtn').click(function () {
+                dialog.close();
+            });
+        },
+    });
+}
+
+function loadIntro() {
+    $('.gameDashboard').load("./welcome.html");
+}
+
+
+
+
+
+// Game Events
+
+$('#startBtn').click(function () {
+    welcome.classList.add('hide');
+    gameDashboard.classList.remove('board-active');
+    game = new Game();
+    // console.log(game.level.data);
+    setTimeout(() => { game.beginGameRound(); }, 1000);
+});
+
+
+$('.restartBtn').click(function () {
+    game.reset();
+});
+
+$('#quitBtn').click(function () {
+    welcome.classList.add('hide');
+    gameDashboard.classList.add('board-active');
+});
+
+$('#submitBtn').click(function () {
+    welcome.classList.add('hide');
+    gameDashboard.classList.add('board-active');
+});
+
+$('#quitBtn').confirm({
+    type: 'red',
+    title: 'Quit game?',
+    content: 'All progress made will be lost.',
+    backgroundDismiss: false,
+    buttons: {
+        quit: {
+            text: 'quit game',
+            btnClass: 'dialog-button',
+            action: function () {
+                $("#gameDashboard").empty();
+                load('./summary.html', true)
+            }
+        },
+        cancel: {
+            text: 'cancel',
+            btnClass: 'dialog-button',
+            action: function () {
+                gameDashboard.classList.remove('board-active')
+            }
+        },
+    }
+});
+
+
+$('#submitBtn').confirm({
+    type: 'red',
+    title: 'Submit?',
+    content: 'Submit game score to database.',
+    backgroundDismiss: false,
+    buttons: {
+        quit: {
+            text: 'submit',
+            btnClass: 'dialog-button',
+            action: function () {
+                gameDashboard.classList.add('board-active');
+                $("#gameDashboard").empty();
+                load('./leaderboard.html', false);
+            }
+        },
+        cancel: {
+            text: 'cancel',
+            btnClass: 'dialog-button',
+            action: function () {
+                $("#gameDashboard").empty();
+                load('./summary.html');
+            }
+        },
+    }
+});
