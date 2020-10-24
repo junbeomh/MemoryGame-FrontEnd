@@ -107,15 +107,11 @@ body {
 
 #gameMessage {
     display: flex;
-    /* align-self: flex-start; */
-    /* right: 0; */
-    position: relative;
+    bottom: 10%;
+    position: absolute;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.8);
-    padding-top: 100px;
-    letter-spacing: 2px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-
+    letter-spacing: 2.5px;
 }
 
 .gameBoard {
