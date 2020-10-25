@@ -3,9 +3,16 @@
     padding: 0;
 }
 
+:root {
+    --colorMain: rgb(156, 156, 156);
+    --colorEmpahsis: rgb(177, 177, 177);
+    --boxShadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
 body {
     margin: 0 auto;
-    background-color: #333333;
+    background: rgb(0, 41, 255);
+    background: radial-gradient(circle, #343434     40%, #272727      100%);
     font-family: 'Rubik', sans-serif;
 }
 
@@ -21,12 +28,11 @@ body {
 .scoreBoard {
     height: 45px;
     display: flex;
-    /* align-self: flex-start; */
     top: 0;
-    /* right: 0; */
     position: absolute;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--colorMain);
+    text-shadow: 2px 2px 5px #252525;
 }
 
 #quitBtn {
@@ -34,20 +40,29 @@ body {
     width: 80px;
     height: 45px;
     padding: 10px;
-    border: 2px solid rgba(255, 255, 255, 0.7);
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
     cursor: pointer;
-    border: 2px solid rgba(255, 255, 255, 0.7);
+    border: 2px solid var(--colorMain);
     justify-content: center;
+    -webkit-box-shadow: var(--boxShadow);
+    box-shadow: var(--boxShadow);
+    color: var(--colorEmpahsis);
+}
+
+#quitBtn:hover{
+    background-color: #3b3b3b;
 }
 
 .tileNum {
     display: flex;
     padding: 10px;
-    border: 2px solid rgba(255, 255, 255, 0.7);
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border: 2px solid var(--colorMain);
     transition: 0.3s;
+    -webkit-box-shadow: var(--boxShadow);
+    box-shadow: var(--boxShadow);
+    color: var(--colorEmpahsis);
+    pointer-events: none;
+
 }
 
 #tileNumLabel, #tileNumValue {
@@ -65,19 +80,24 @@ body {
 .trialNum {
     display: flex;
     padding: 10px;
-    border: 2px solid rgba(255, 255, 255, 0.7);
+    border: 2px solid var(--colorMain);
     margin-left: 3px;
     margin-right: 3px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
+    -webkit-box-shadow:var(--boxShadow);
+    box-shadow: var(--boxShadow);
+    pointer-events: none;
+    color: var(--colorEmpahsis);
+
 }
 
 #trialNumLabe, #trialNumValue {
     width: 90px;
 }
 
-#trialNumLabe {
+#trialNumLabel {
     text-align: left;
+    
 }
 
 #trialNumValue {
@@ -87,10 +107,14 @@ body {
 .scoreNum {
     display: flex;
     padding: 10px;
-    border: 2px solid rgba(255, 255, 255, 0.7);
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border: 2px solid var(--colorMain);
     margin-right: 3px;
     transition: 0.3s;
+    -webkit-box-shadow: var(--boxShadow);
+    box-shadow: var(--boxShadow);
+    pointer-events: none;
+    color: var(--colorEmpahsis);
+
 }
 
 #scoreNumLabel, #scoreNumValue {
@@ -110,15 +134,19 @@ body {
     bottom: 10%;
     position: absolute;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--colorMain);
     letter-spacing: 2.5px;
+    text-shadow: 2px 2px 5px #252525;
 }
 
 .gameBoard {
-    padding: 57px 65px;
-    border: 3px solid rgba(255, 255, 255, 0.7);
+    /* 1 to 25 for square */
+    padding: 50px 60px;  
+
+    border: 5px solid var(--colorMain);
     border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: var(--boxShadow);
+    box-shadow: var(--boxShadow);
 }
 
 .gameGrid {
@@ -148,20 +176,23 @@ body {
     max-width: 70px;
     max-height: 70px;
     margin: 3px;
-    background-color: #ffffff80;
+    background-color: var(--colorEmpahsis);
+
     border-radius: 5px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
-    transition: 0.4s;
+    -webkit-box-shadow: var(--boxShadow);
+    box-shadow: var(--boxShadow);
+    transition: 0.25s ease-in-out;
 }
 
 .col.invisible {
     background-color: #333333;
     box-shadow: 0 0 0 0 white;
-    /* pointer-events: none; */
 }
 
 .col:hover {
     opacity: 0.7;
+    transform: translateX(-5px);
+
 }
 
 .col.correct {
@@ -171,7 +202,7 @@ body {
 }
 
 .col.wrong {
-    background-color: rgb(197, 64, 64);
+    background-color: rgb(219, 103, 103);
     transform: rotateY(180deg);
     pointer-events: none;
 }
@@ -179,7 +210,7 @@ body {
 .gameDashboard {
     width: 100%;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(77, 77, 77, 0.7);
     position: fixed;
     display: flex;
     justify-content: center;
