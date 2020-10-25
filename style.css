@@ -11,8 +11,7 @@
 
 body {
     margin: 0 auto;
-    background: rgb(0, 41, 255);
-    background: radial-gradient(circle, #343434     40%, #272727      100%);
+    background: radial-gradient(circle, #2b2b2b 50%, #141414 100%);
     font-family: 'Rubik', sans-serif;
 }
 
@@ -28,6 +27,7 @@ body {
 .scoreBoard {
     height: 45px;
     display: flex;
+    align-content: space-between;
     top: 0;
     position: absolute;
     text-transform: uppercase;
@@ -49,11 +49,11 @@ body {
     color: var(--colorEmpahsis);
 }
 
-#quitBtn:hover{
+#quitBtn:hover {
     background-color: #3b3b3b;
 }
 
-.tileNum {
+.tileNum, .trialNum, .scoreNum  {
     display: flex;
     padding: 10px;
     border: 2px solid var(--colorMain);
@@ -62,70 +62,25 @@ body {
     box-shadow: var(--boxShadow);
     color: var(--colorEmpahsis);
     pointer-events: none;
-
 }
 
 #tileNumLabel, #tileNumValue {
-    width: 50px;
-}
-
-#tileNumLabel {
-    text-align: left;
-}
-
-#tileNumValue {
-    text-align: end;
-}
-
-.trialNum {
-    display: flex;
-    padding: 10px;
-    border: 2px solid var(--colorMain);
-    margin-left: 3px;
-    margin-right: 3px;
-    transition: 0.3s;
-    -webkit-box-shadow:var(--boxShadow);
-    box-shadow: var(--boxShadow);
-    pointer-events: none;
-    color: var(--colorEmpahsis);
-
+    width: 40px;
 }
 
 #trialNumLabe, #trialNumValue {
     width: 90px;
 }
 
-#trialNumLabel {
-    text-align: left;
-    
-}
-
-#trialNumValue {
-    text-align: end;
-}
-
-.scoreNum {
-    display: flex;
-    padding: 10px;
-    border: 2px solid var(--colorMain);
-    margin-right: 3px;
-    transition: 0.3s;
-    -webkit-box-shadow: var(--boxShadow);
-    box-shadow: var(--boxShadow);
-    pointer-events: none;
-    color: var(--colorEmpahsis);
-
-}
-
 #scoreNumLabel, #scoreNumValue {
     width: 60px;
 }
 
-#scoreNumLabel {
+#trialNumLabel, #tileNumLabel, #scoreNumLabel {
     text-align: left;
 }
 
-#scoreNumValue {
+#trialNumValue, #tileNumValue, #scoreNumValue {
     text-align: end;
 }
 
@@ -140,9 +95,7 @@ body {
 }
 
 .gameBoard {
-    /* 1 to 25 for square */
-    padding: 50px 60px;  
-
+    padding: 50px 60px;
     border: 5px solid var(--colorMain);
     border-radius: 10px;
     -webkit-box-shadow: var(--boxShadow);
@@ -177,7 +130,6 @@ body {
     max-height: 70px;
     margin: 3px;
     background-color: var(--colorEmpahsis);
-
     border-radius: 5px;
     -webkit-box-shadow: var(--boxShadow);
     box-shadow: var(--boxShadow);
@@ -192,7 +144,6 @@ body {
 .col:hover {
     opacity: 0.7;
     transform: translateX(-5px);
-
 }
 
 .col.correct {
@@ -238,7 +189,6 @@ body {
     color: black;
     background-color: rgb(204, 204, 204);
     border-radius: 4px;
-    /* border: 3px solid rgb(0, 0, 0); */
     margin-left: 7.5px;
     margin-right: 7.5px;
     pointer-events: auto;
@@ -251,10 +201,12 @@ body {
     pointer-events: none;
 }
 
-.summary {
+.summary, .leaderboard, .welcome {
     position: relative;
     padding: 10px;
     background-color: white;
+    display: flex;
+    flex-direction: column;
     display: flex;
     justify-items: space-around;
     align-items: center;
@@ -263,8 +215,13 @@ body {
     text-transform: uppercase;
 }
 
+.welcome.hide {
+    visibility: hidden;
+    opacity: 0;
+    display: none;
+}
+
 #summaryTitle {
-    /* padding: 10px; */
     font-size: 100%;
     font-weight: bold;
 }
@@ -291,7 +248,6 @@ body {
 #nameValue {
     margin-left: 10px;
     width: 150px;
-    autocom
 }
 
 .buttons {
@@ -301,35 +257,6 @@ body {
     justify-content: space-evenly;
 }
 
-.leaderboard {
-    position: relative;
-    padding: 25px;
-    background-color: white;
-    /* display: flex; */
-    justify-items: space-around;
-    align-items: center;
-    flex-direction: column;
-    transition: visibility 0s opacity 0.5s;
-}
-
-.welcome {
-    position: relative;
-    padding: 25px;
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    justify-items: space-around;
-    align-items: center;
-    opacity: 1;
-    visibility: visible;
-    transition: visibility 0s opacity 0.5s;
-}
-
-.welcome.hide {
-    visibility: hidden;
-    opacity: 0;
-    display: none;
-}
 
 @-moz-keyframes spin {
     100% {
