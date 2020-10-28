@@ -171,7 +171,7 @@ class Game {
         if (this.totalScore < 0) {
             gameDashboard.classList.add('board-active');
             gameOverGameMessage();
-            setTimeout(() => { loadSummary(); }, 2000);
+            setTimeout(() => { loadSummary(game.totalScore, game.maxLevel); }, 2000);
             return;
         } else {
             attemptsGameMessage(this);
@@ -212,13 +212,12 @@ class Game {
             this.currRound > this.totalRounds ? this.currRound = this.totalRounds : this.currRound++;
 
         } else {
-            setTimeout(() => { load('./summary.html', true); }, 1000);
+            setTimeout(() => { loadSummary(game.totalScore, game.maxLevel); }, 1000);
         }
     }
 }
 
 // Click Events
-
 $('#startBtn').click(function () {
     welcome.classList.add('hide');
     gameDashboard.classList.remove('board-active');
@@ -231,4 +230,15 @@ $('#startBtn').click(function () {
 $('.restartBtn').click(function () {
     gameDashboard.classList.remove('board-active');
     game.reset();
+});
+
+$('#quitBtn').click(function () {
+    gameDashboard.classList.add('board-active');
+    loadConfirmModal(confirmQuit, confirmQuitHeader, confirmQuitMsg, function(){ return loadSummary(game.totalScore, game.level.currMax); }, hideConfirm);
+});
+
+
+$('#submitBtn').click(function () {
+    gameDashboard.classList.add('board-active');
+    loadConfirmModal(confirmSubmit, confirmSubmitHeader, confirmSubmitMsg, loadLeaderboard, function(){ return loadSummary(game.totalScore, game.level.currMax); });
 });
