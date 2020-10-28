@@ -5,23 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Memory Game</title>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./styles/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    <link rel="stylesheet" href="./styles/style.css">
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-    <script src="./level.js"></script>
-    <script src="./script.js"></script>
-
 </head>
 
 <body>
 
     <div class="game">
 
-        <div class="scoreBoard" id="scoreBoard"> 
+        <div class="scoreBoard" id="scoreBoard">
             <div id="quitBtn"> quit </div>
         </div>
 
@@ -29,17 +25,18 @@
         <div class="gameBoard active">
             <div id="gameGrid"> </div>
         </div>
+
         <div id="gameMessage"> </div>
 
         <div class="gameDashboard board-active"></div>
-
     </div>
-
+    <script src="./constants/strings.js"> </script>
+    <script src="./js/uiLoader.js"></script>
+    <script src="./js/level.js"></script>
+    <script src="./js/script.js"></script>
     <script>
         loadIntro();
     </script>
-
-
 </body>
 
 </html>

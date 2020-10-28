@@ -4,30 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css">
-    <script src="./level.js"></script>
-    <script src="./script.js"></script>
+    <link rel="stylesheet" href="./styles/style.css">
     <title>Summary</title>
 </head>
 
 <body>
     <div class="summary">
-        <span id="summaryTitle">game summary</span>
+        <span id="summaryTitle"></span>
         <div class="gameInfo">
-            <span id="gameScoreLabel">score </span>
-            <span id="gameScoreValue">  </span>
-            <span id="levelLabel">max Level </span>
+            <span id="gameScoreLabel"> </span>
+            <span id="gameScoreValue"> </span>
+            <span id="levelLabel"> </span>
             <span id="levelValue"> </span>
         </div>
         <div class="summaryForm">
-            <label for="name"> Name: </label>
+            <label for="name" id="name">  </label>
             <input id="nameValue" type="text" autocomplete="off">
         </div>
         <div class="buttons">
-            <div class="restartBtn dialog-button"> restart </div>
-            <div class="dialog-button disabled" id="submitBtn"> submit </div>
+            <div class="dialog-button disabled" id="submitBtn" onclick="">  </div>
+            <div class="restartBtn dialog-button" id="restartBtn">  </div>
         </div>
     </div>
+    <script src="./constants/strings.js"></script>
+    <script src="./js/uiLoader.js"></script>
+    <!-- <script src="./js/script.js"></script> -->
 
     <script>
         const input = document.querySelector('input');
@@ -35,14 +36,29 @@
 
         input.addEventListener('input', checkForInput);
         function checkForInput(e) {
-            if (e.target.value) {
-                submitBtn.classList.remove('disabled');
-                console.log('auto');
-            } else {
-                submitBtn.classList.add('disabled');
-                console.log('none');
-            }
+            e.target.value.trim() ? submitBtn.classList.remove('disabled') : submitBtn.classList.add('disabled');
+
         }
+        // submitBtn.addEventListener('click', promptConfirm);
+        // function promptConfirm() {
+        //     load('./leaderboard.html');
+        // }
+
+        function addUser() {
+            fetch("http://localhost:3000/api/user/addUser", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: new URLSearchParams({
+                    'name': document.getElementById('nameValue').value,
+                    'score': 250
+                })
+            }).then((response) => {
+                return console.log(response);
+            })
+        }
+
     </script>
 
 </body>

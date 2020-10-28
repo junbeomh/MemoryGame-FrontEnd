@@ -1,9 +1,9 @@
 class Level {
     constructor() {
         this.data = data;
+        this.maxLevel = this.data.length;
         this.currLevel = 0;
         this.currMax = 0;
-        this.maxLevel = this.data.length;
     }
 }
 

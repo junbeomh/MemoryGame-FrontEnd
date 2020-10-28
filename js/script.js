@@ -1,15 +1,17 @@
 // DOM constants 
 const gameGrid = document.getElementById("gameGrid");
-const gameMessage = document.getElementById("gameMessage");
 const scoreBoard = document.getElementById("scoreBoard");
-const confirmQuit = document.querySelector('.confirmQuit');
-const confirmSubmit = document.querySelector('.confirmSubmit');
+const score = document.getElementById("scoreNumValue");
+const confirmModal = document.getElementById('confirmModal');
 const welcome = document.querySelector('.welcome');
 const summary = document.querySelector('.summary');
-const leaderboard = document.querySelector('.leaderboard');
 const gameDashboard = document.querySelector('.gameDashboard');
 const gameBoard = document.getElementsByClassName('gameBoard')[0];
 
+// const confirmQuit = document.querySelector('.confirmQuit');
+// const confirmSubmit = document.querySelector('.confirmSubmit');
+// const leaderboard = document.querySelector('.leaderboard');
+// const gameMessage = document.getElementById("gameMessage");
 const MAX_ROUNDS = 11;  // starting from zero
 
 
@@ -27,7 +29,6 @@ class Game {
         this.numbAnswers = 3;
         this.mistake = false;
         this.isStarted = false;
-        this.observers = [];
     }
 
     reset = () => {
@@ -42,6 +43,7 @@ class Game {
         this.mistake = false;
         this.isStarted = false;
         this.clearGrid();
+        gameGrid.className = "gameGrid disableClick";
         setTimeout(() => { this.beginGameRound(); }, 1000);
     }
 
@@ -51,11 +53,11 @@ class Game {
         this.isStarted = true;
         this.mistake = false;
         gameGrid.innerHTML = "";
-        gameMessage.style.visibility = "hidden";
+        gameGrid.className = "gameGrid disableClick";
+        resetGameMessage();
     }
 
     makeGrid = () => {
-        gameGrid.className = "gameGrid disableClick"
         for (let y = 0; y < this.y; y++) {
             const row = document.createElement("div");
             row.id = `row${y}`;
@@ -153,10 +155,8 @@ class Game {
 
 
     tileClick = (col, y, x) => {
-        const gameScore = document.getElementById("scoreNumValue");
         this.totalClick++;
 
-        //compare grid[y][x] to col[y][x]
         if (this.grid[y][x] === 1) {
             this.answers = this.answers.filter((obj) => { return obj.id !== `${y}-${x}`; });
             this.totalScore++;
@@ -170,9 +170,12 @@ class Game {
 
         if (this.totalScore < 0) {
             gameDashboard.classList.add('board-active');
-            setTimeout(() => { load('./summary.html', true); }, 2000);
+            gameOverGameMessage();
+            setTimeout(() => { loadSummary(); }, 2000);
+            return;
+        } else {
+            attemptsGameMessage(this);
         }
-
 
         if (this.totalClick == this.numbAnswers) {
             if (this.mistake) {
@@ -180,25 +183,19 @@ class Game {
             } else {
                 this.totalScore += this.numbAnswers;
                 this.level.currLevel === this.level.maxLevel ? currLevel = this.level.maxLevel : this.level.currLevel++;
-                this.level.currMax = this.level.currLevel;
             }
             gameGrid.style.pointerEvents = "none";
             if (this.answers.length != 0) { setTimeout(() => { this.showAnswers(); }, 1000); }
-            setTimeout(() => { this.beginGameRound(); }, 1500);
+            setTimeout(() => { this.beginGameRound(); }, 3000);
         }
-        gameMessage.innerHTML = `Keep Clicking. You can uncover ${this.numbAnswers - this.totalClick} more tiles.`;
-        gameMessage.style.visibility = "visible";
-        gameScore.innerHTML = this.totalScore;
+        this.level.currMax > this.level.currLevel ? this.level.currMax : this.level.currMax = this.level.currLevel + 1;
+        showScore(this);
     }
 
 
     beginGameRound = () => {
-        const tiles = document.getElementById('tileNumValue');
-        const trials = document.getElementById('trialNumValue');
-        const gameScore = document.getElementById("scoreNumValue");
-
         let currLevel = this.level.currLevel;
-        if (this.currRound < this.totalRounds) {
+        if (this.currRound <= this.totalRounds) {
             this.x = this.level.data[currLevel].x;
             this.y = this.level.data[currLevel].y;
             this.numbAnswers = this.level.data[currLevel].answers;
@@ -209,11 +206,9 @@ class Game {
             setTimeout(() => this.previewAnswers(), 2000);
             setTimeout(() => gameGrid.style.pointerEvents = "auto", 5000);
             document.getElementsByClassName('gameBoard')[0].className = "gameBoard";
-
-            tiles.innerHTML = this.numbAnswers;
-            trials.innerHTML = `${this.currRound + 1} &nbsp; of &nbsp;  ${this.totalRounds + 1} `;
-            gameScore.innerHTML = this.totalScore < 0 ? this.totalScore = 0 : this.totalScore;
-
+            showScore(this);
+            showTiles(this);
+            showTrials(this);
             this.currRound > this.totalRounds ? this.currRound = this.totalRounds : this.currRound++;
 
         } else {
@@ -222,133 +217,18 @@ class Game {
     }
 }
 
-
-function renderScoreBoard(){
-    const boardTypes = ["tile", "trial", "score"];
-    let scoreboard = document.getElementById("scoreBoard");
-    for (let board of boardTypes) {
-        const boardDiv = document.createElement("div");
-        boardDiv.setAttribute("class", `${board}Num`);
-        const label = document.createElement("p");
-        label.setAttribute("id", `${board}NumLabel`);
-        label.innerHTML = `${board}`;
-        const value = document.createElement("p");
-        value.setAttribute("id", `${board}NumValue`);
-        boardDiv.appendChild(label);
-        boardDiv.appendChild(value);
-        scoreboard.appendChild(boardDiv);
-    }
-}
-
-
-
-function load(page, withData) {
-    gameDashboard.classList.add('board-active');
-    var dialog = $.dialog({
-        type: 'blue',
-        closeIcon: false,
-        title: false,
-        content: `url:${page}`,
-        onContentReady: function () {
-            if (withData) {
-                switch (page) {
-                    case "./summary.html":
-                        this.$content.find('#gameScoreValue').text(game.totalScore);
-                        this.$content.find('#levelValue').text(game.level.currMax);
-
-                    case "./leaderboard.html":
-                    // database action here
-                }
-            }
-            this.$content.find('.restartBtn').click(function () {
-                gameDashboard.classList.remove('board-active');
-                dialog.close();
-            });
-            this.$content.find('#submitBtn').click(function () {
-                dialog.close();
-            });
-        },
-    });
-}
-
-function loadIntro() {
-    $('.gameDashboard').load("./welcome.html");
-}
-
-// Game Events
+// Click Events
 
 $('#startBtn').click(function () {
     welcome.classList.add('hide');
     gameDashboard.classList.remove('board-active');
-    renderScoreBoard();
+    makeScoreBoard();
     game = new Game();
     setTimeout(() => { game.beginGameRound(); }, 1000);
 });
 
 
 $('.restartBtn').click(function () {
-    console.log('pressed');
+    gameDashboard.classList.remove('board-active');
     game.reset();
 });
-
-$('#quitBtn').click(function () {
-    welcome.classList.add('hide');
-    gameDashboard.classList.add('board-active');
-});
-
-$('#submitBtn').click(function () {
-    welcome.classList.add('hide');
-    gameDashboard.classList.add('board-active');
-});
-
-$('#quitBtn').confirm({
-    type: 'red',
-    title: 'Quit game?',
-    content: 'All progress made will be lost.',
-    backgroundDismiss: false,
-    buttons: {
-        quit: {
-            text: 'quit game',
-            btnClass: 'dialog-button',
-            action: function () {
-                $("#gameDashboard").empty();
-                load('./summary.html', true)
-            }
-        },
-        cancel: {
-            text: 'cancel',
-            btnClass: 'dialog-button',
-            action: function () {
-                gameDashboard.classList.remove('board-active')
-            }
-        },
-    }
-});
-
-
-$('#submitBtn').confirm({
-    type: 'red',
-    title: 'Submit?',
-    content: 'Submit game score to database.',
-    backgroundDismiss: false,
-    buttons: {
-        quit: {
-            text: 'submit',
-            btnClass: 'dialog-button',
-            action: function () {
-                gameDashboard.classList.add('board-active');
-                $("#gameDashboard").empty();
-                load('./leaderboard.html', false);
-            }
-        },
-        cancel: {
-            text: 'cancel',
-            btnClass: 'dialog-button',
-            action: function () {
-                $("#gameDashboard").empty();
-                load('./summary.html');
-            }
-        },
-    }
-});
-

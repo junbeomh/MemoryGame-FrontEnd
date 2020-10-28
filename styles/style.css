@@ -13,6 +13,7 @@ body {
     margin: 0 auto;
     background: radial-gradient(circle, #2b2b2b 50%, #141414 100%);
     font-family: 'Rubik', sans-serif;
+    text-transform: uppercase;
 }
 
 .game {
@@ -38,7 +39,6 @@ body {
 #quitBtn {
     display: flex;
     width: 80px;
-    height: 45px;
     padding: 10px;
     transition: 0.3s;
     cursor: pointer;
@@ -88,7 +88,6 @@ body {
     display: flex;
     bottom: 10%;
     position: absolute;
-    text-transform: uppercase;
     color: var(--colorMain);
     letter-spacing: 2.5px;
     text-shadow: 2px 2px 5px #252525;
@@ -143,7 +142,7 @@ body {
 
 .col:hover {
     opacity: 0.7;
-    transform: translateX(-5px);
+    transform: translateX(-2.5px);
 }
 
 .col.correct {
@@ -161,7 +160,7 @@ body {
 .gameDashboard {
     width: 100%;
     height: 100vh;
-    background-color: rgba(77, 77, 77, 0.7);
+    background-color: rgba(15, 15, 15, 0.7);
     position: fixed;
     display: flex;
     justify-content: center;
@@ -185,13 +184,13 @@ body {
     align-items: center;
     cursor: pointer;
     font-weight: bold;
-    text-transform: uppercase;
     color: black;
     background-color: rgb(204, 204, 204);
     border-radius: 4px;
     margin-left: 7.5px;
     margin-right: 7.5px;
     pointer-events: auto;
+    font-size: 17px;
 }
 
 .dialog-button.disabled {
@@ -201,7 +200,7 @@ body {
     pointer-events: none;
 }
 
-.summary, .leaderboard, .welcome {
+.summary, .leaderboard, .welcome, .confirmModal {
     position: relative;
     padding: 10px;
     background-color: white;
@@ -212,7 +211,12 @@ body {
     align-items: center;
     flex-direction: column;
     transition: visibility 0s opacity 0.5s;
-    text-transform: uppercase;
+}
+
+.confirmModal.hide {
+    visibility: hidden;
+    opacity: 0;
+    display: none;  
 }
 
 .welcome.hide {
@@ -221,8 +225,8 @@ body {
     display: none;
 }
 
-#summaryTitle {
-    font-size: 100%;
+#summaryTitle, #leaderboardTitle, #welcomeTitle {
+    font-size: 30px;
     font-weight: bold;
 }
 
@@ -248,6 +252,15 @@ body {
 #nameValue {
     margin-left: 10px;
     width: 150px;
+}
+
+#leaderboardEntries{
+    display: flex;
+    flex-direction: column;
+}
+
+.leaderboardEntry{
+    display: flex;
 }
 
 .buttons {
