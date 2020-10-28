@@ -60,18 +60,39 @@ const loadConfirmModal = (type, header, msg, submitCallback, cancelCallback) => 
 }
 
 const loadLeaderboard = () => {
-    $('.gameDashboard').load("./leaderboard.html", () => {
-        document.getElementById("leaderboardTitle").innerHTML = leaderboardHeader;
-        console.log(document.getElementById("restartBtn"));
-        document.getElementById("restartBtn").innerHTML = btnRestart;
-    });
+    let score = sessionStorage.getItem("score");
+    let name = sessionStorage.getItem("name");
+    console.log("score: ", score);
+    console.log("name: ", name);
+
+    fetch("http://localhost:3000/api/user/addUser", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: new URLSearchParams({
+            'name': name,
+            'score': 400,
+        })
+    }).then(() => {
+        $('.gameDashboard').load("./leaderboard.html", () => {
+            document.getElementById("leaderboardTitle").innerHTML = leaderboardHeader;
+            console.log(document.getElementById("restartBtn"));
+            document.getElementById("restartBtn").innerHTML = btnRestart;
+        });
+    })
 }
 
-const loadSummary = () => {
+const loadSummary = (score, maxLevel) => {
+    sessionStorage.setItem("score", score);
+    console.log("score: ", score);
+
     $('.gameDashboard').load("./summary.html", () => {
-        document.getElementById("summaryTitle").innerHTML = summaryHeader;
+        document.getElementById("summaryHeader").innerHTML = summaryHeader;
         document.getElementById("gameScoreLabel").innerHTML = summaryGameScore;
+        document.getElementById("gameScoreValue").innerHTML = score;
         document.getElementById("levelLabel").innerHTML = summaryGameMaxLvl;
+        document.getElementById("levelValue").innerHTML = maxLevel;
         document.getElementById("name").innerHTML = summaryFormName;
         document.getElementById("submitBtn").innerHTML = btnSubmit;
         document.getElementById("restartBtn").innerHTML = btnRestart;
@@ -79,21 +100,9 @@ const loadSummary = () => {
 }
 
 const loadIntro = () => {
-    $('.gameDashboard').load("./welcome.html", () => {
-        document.getElementById("welcomeTitle").innerHTML = introHeader;
-        document.getElementById("introHeader").innerHTML = introBody;
+    $('.gameDashboard').load("./intro.html", () => {
+        document.getElementById("introHeader").innerHTML = introHeader;
+        document.getElementById("introBody").innerHTML = introBody;
         document.getElementById("startBtn").innerHTML = btnStart;
     });
 }
-
-
-$('#quitBtn').click(function () {
-    gameDashboard.classList.add('board-active');
-    loadConfirmModal(confirmQuit, confirmQuitHeader, confirmQuitMsg, loadSummary, hideConfirm);
-});
-
-
-$('#submitBtn').click(function () {
-    gameDashboard.classList.add('board-active');
-    loadConfirmModal(confirmSubmit, confirmSubmitHeader, confirmSubmitMsg, loadLeaderboard, loadSummary);
-});
