@@ -202,7 +202,7 @@ body {
 
 .summary, .leaderboard, .welcome, .confirmModal {
     position: relative;
-    padding: 10px;
+    padding: 20px;
     background-color: white;
     display: flex;
     flex-direction: column;
@@ -211,6 +211,7 @@ body {
     align-items: center;
     flex-direction: column;
     transition: visibility 0s opacity 0.5s;
+    border-radius: 5px;
 }
 
 .confirmModal.hide {
@@ -225,9 +226,14 @@ body {
     display: none;
 }
 
-#summaryTitle, #leaderboardTitle, #welcomeTitle {
+#summaryHeader, #leaderboardHeader, #introHeader, #confirmHeader {
     font-size: 30px;
     font-weight: bold;
+}
+
+#confirmMsg, #introBody {
+    margin-top: 10px;
+    margin-bottom: 20px;
 }
 
 .gameInfo {
