@@ -10,7 +10,7 @@
 
 <body>
     <div class="summary">
-        <span id="summaryTitle"></span>
+        <span id="summaryHeader"></span>
         <div class="gameInfo">
             <span id="gameScoreLabel"> </span>
             <span id="gameScoreValue"> </span>
@@ -22,43 +22,24 @@
             <input id="nameValue" type="text" autocomplete="off">
         </div>
         <div class="buttons">
-            <div class="dialog-button disabled" id="submitBtn" onclick="">  </div>
+            <div class="dialog-button disabled" id="submitBtn" onclick="saveUser()">  </div>
             <div class="restartBtn dialog-button" id="restartBtn">  </div>
         </div>
     </div>
     <script src="./constants/strings.js"></script>
     <script src="./js/uiLoader.js"></script>
-    <!-- <script src="./js/script.js"></script> -->
+    <script src="./js/script.js"></script>
 
     <script>
         const input = document.querySelector('input');
-        const submitBtn = document.getElementById('submitBtn');
-
         input.addEventListener('input', checkForInput);
         function checkForInput(e) {
             e.target.value.trim() ? submitBtn.classList.remove('disabled') : submitBtn.classList.add('disabled');
-
         }
-        // submitBtn.addEventListener('click', promptConfirm);
-        // function promptConfirm() {
-        //     load('./leaderboard.html');
-        // }
-
-        function addUser() {
-            fetch("http://localhost:3000/api/user/addUser", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: new URLSearchParams({
-                    'name': document.getElementById('nameValue').value,
-                    'score': 250
-                })
-            }).then((response) => {
-                return console.log(response);
-            })
+        function saveUser() {
+            let name = document.getElementById("nameValue").value;
+            sessionStorage.setItem('name', name);
         }
-
     </script>
 
 </body>
