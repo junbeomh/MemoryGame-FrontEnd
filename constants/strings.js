@@ -1,12 +1,6 @@
-// const gameMessage = document.getElementById("gameMessage");
-// const score = document.getElementById("scoreNumValue");
-// const tiles = document.getElementById('tileNumValue');
-// const trials = document.getElementById('trialNumValue');
-// const gameScore = document.getElementById("scoreNumValue");
-
 const leaderboardHeader = "leaderboard";
 const introHeader = "memory matrix";
-const introBody = "an explanation about memory matrix";
+const introBody = "challenge your spatial recall <br> by memorizing the tile's location.";
 const summaryHeader = "game summary";
 const summaryGameScore = "score";
 const summaryGameMaxLvl = "max level";
