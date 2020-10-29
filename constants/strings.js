@@ -1,4 +1,7 @@
 const leaderboardHeader = "leaderboard";
+const leaderboardRankHeader = "rank";
+const leaderboardNameHeader = "name";
+const leaderboardScoreHeader = "score";
 const introHeader = "memory matrix";
 const introBody = "challenge your spatial recall <br> by memorizing the tile's location.";
 const summaryHeader = "game summary";

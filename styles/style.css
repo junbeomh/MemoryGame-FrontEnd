@@ -260,10 +260,13 @@ body {
 #leaderboardEntries{
     display: flex;
     flex-direction: column;
+    padding: 20px;
 }
 
 .leaderboardEntry{
     display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .buttons {
