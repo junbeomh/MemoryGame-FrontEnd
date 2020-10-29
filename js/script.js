@@ -43,7 +43,6 @@ class Game {
         this.mistake = false;
         this.isStarted = false;
         this.clearGrid();
-        console.log('cleargrid called');
         setTimeout(() => { this.beginGameRound(); }, 1000);
     }
 
@@ -124,6 +123,7 @@ class Game {
     }
 
     previewAnswers = () => {
+        document.getElementById('click').play();
 
         // Show answers
         this.showAnswers();
@@ -136,7 +136,6 @@ class Game {
         // Rotate board 
         setTimeout(function () {
             gameBoard.className = "gameBoard rotate";
-            // console.log('rotating board');
         }, 2000);
     }
 
@@ -156,6 +155,7 @@ class Game {
 
     tileClick = (col, y, x) => {
         this.totalClick++;
+        document.getElementById('click').play();
 
         if (this.grid[y][x] === 1) {
             this.answers = this.answers.filter((obj) => { return obj.id !== `${y}-${x}`; });
@@ -171,18 +171,24 @@ class Game {
         if (this.totalScore < 0) {
             gameDashboard.classList.add('board-active');
             gameOverGameMessage();
-            setTimeout(() => { loadSummary(game.totalScore, game.maxLevel); }, 2000);
+            document.getElementById('gameOver').play();
+            setTimeout(() => {
+                loadSummary(game.totalScore, game.level.currMax)
+            }, 2000);
             return;
         } else {
             attemptsGameMessage(this);
         }
 
         if (this.totalClick == this.numbAnswers) {
+            gameGrid.style.pointerEvents = "none";
             if (this.mistake) {
                 this.level.currLevel <= 0 ? this.level.currLevel = 0 : this.level.currLevel--;
+                document.getElementById('levelFail').play();
             } else {
                 this.totalScore += this.numbAnswers;
-                this.level.currLevel === this.level.maxLevel ? currLevel = this.level.maxLevel : this.level.currLevel++;
+                this.level.currLevel === this.level.maxLevel ? currLevel = this.level.maxLevel : this.level.curArLevel++;
+                document.getElementById('levelUp').play();
             }
             if (this.answers.length != 0) { setTimeout(() => { this.showAnswers(); }, 1000); }
             setTimeout(() => { this.beginGameRound(); }, 3000);
@@ -209,9 +215,11 @@ class Game {
             showTiles(this);
             showTrials(this);
             this.currRound > this.totalRounds ? this.currRound = this.totalRounds : this.currRound++;
-
         } else {
-            setTimeout(() => { loadSummary(game.totalScore, game.maxLevel); }, 1000);
+            gameDashboard.classList.add('board-active');
+            setTimeout(() => {
+                loadSummary(game.totalScore, game.level.currMax)
+            }, 1000);
         }
     }
 }
@@ -233,11 +241,12 @@ $('.restartBtn').click(function () {
 
 $('#quitBtn').click(function () {
     gameDashboard.classList.add('board-active');
-    loadConfirmModal(confirmQuit, confirmQuitHeader, confirmQuitMsg, function () { return loadSummary(game.totalScore, game.level.currMax); }, hideConfirm);
+    loadConfirmModal(confirmQuit, confirmQuitHeader, confirmQuitMsg, () => { return loadSummary(game.totalScore, game.level.currMax); }, hideConfirm);
 });
 
 
 $('#submitBtn').click(function () {
     gameDashboard.classList.add('board-active');
-    loadConfirmModal(confirmSubmit, confirmSubmitHeader, confirmSubmitMsg, loadLeaderboard, function () { return loadSummary(game.totalScore, game.level.currMax); });
+    loadConfirmModal(confirmSubmit, confirmSubmitHeader, confirmSubmitMsg, loadLeaderboard, () => { return loadSummary(game.totalScore, game.level.currMax); });
 });
+
