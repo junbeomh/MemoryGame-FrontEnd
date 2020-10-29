@@ -7,11 +7,6 @@ const welcome = document.querySelector('.welcome');
 const summary = document.querySelector('.summary');
 const gameDashboard = document.querySelector('.gameDashboard');
 const gameBoard = document.getElementsByClassName('gameBoard')[0];
-
-// const confirmQuit = document.querySelector('.confirmQuit');
-// const confirmSubmit = document.querySelector('.confirmSubmit');
-// const leaderboard = document.querySelector('.leaderboard');
-// const gameMessage = document.getElementById("gameMessage");
 const MAX_ROUNDS = 11;  // starting from zero
 
 
@@ -141,6 +136,7 @@ class Game {
 
 
     showAnswers = () => {
+        document.getElementById('click').play();
         for (const answer of this.answers) {
             answer.className = "col correct"
         }
@@ -187,7 +183,7 @@ class Game {
                 document.getElementById('levelFail').play();
             } else {
                 this.totalScore += this.numbAnswers;
-                this.level.currLevel === this.level.maxLevel ? currLevel = this.level.maxLevel : this.level.curArLevel++;
+                this.level.currLevel === this.level.maxLevel ? currLevel = this.level.maxLevel : this.level.currLevel++;
                 document.getElementById('levelUp').play();
             }
             if (this.answers.length != 0) { setTimeout(() => { this.showAnswers(); }, 1000); }
