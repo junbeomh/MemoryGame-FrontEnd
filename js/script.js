@@ -38,7 +38,6 @@ class Game {
         this.mistake = false;
         this.isStarted = false;
         this.clearGrid();
-        setTimeout(() => { this.beginGameRound(); }, 1000);
     }
 
     clearGrid = () => {
@@ -221,19 +220,7 @@ class Game {
 }
 
 // Click Events
-$('#startBtn').click(function () {
-    welcome.classList.add('hide');
-    gameDashboard.classList.remove('board-active');
-    makeScoreBoard();
-    game = new Game();
-    setTimeout(() => { game.beginGameRound(); }, 1000);
-});
 
-
-$('.restartBtn').click(function () {
-    gameDashboard.classList.remove('board-active');
-    game.reset();
-});
 
 $('#quitBtn').click(function () {
     gameDashboard.classList.add('board-active');
@@ -245,4 +232,21 @@ $('#submitBtn').click(function () {
     gameDashboard.classList.add('board-active');
     loadConfirmModal(confirmSubmit, confirmSubmitHeader, confirmSubmitMsg, loadLeaderboard, () => { return loadSummary(game.totalScore, game.level.currMax); });
 });
+
+$('.restartBtn').click(function () {
+    gameDashboard.classList.remove('board-active');
+    $('.gameDashboard').empty();
+    game.reset();
+    setTimeout(() => { game.beginGameRound(); }, 1000);
+});
+
+
+$('#startBtn').click(function () {
+    welcome.classList.add('hide');
+    gameDashboard.classList.remove('board-active');
+    makeScoreBoard();
+    game = new Game();
+    setTimeout(() => { game.beginGameRound(); }, 1000);
+});
+
 
