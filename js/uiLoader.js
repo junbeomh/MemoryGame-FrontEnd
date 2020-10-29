@@ -62,22 +62,19 @@ const loadConfirmModal = (type, header, msg, submitCallback, cancelCallback) => 
 const loadLeaderboard = () => {
     let score = sessionStorage.getItem("score");
     let name = sessionStorage.getItem("name");
-    console.log("score: ", score);
-    console.log("name: ", name);
 
-    fetch("http://localhost:3000/api/user/addUser", {
+    fetch(API + ADD_USER_ENDPOINT, {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         },
         body: new URLSearchParams({
             'name': name,
-            'score': 400,
+            'score': score,
         })
     }).then(() => {
         $('.gameDashboard').load("./leaderboard.html", () => {
-            document.getElementById("leaderboardTitle").innerHTML = leaderboardHeader;
-            console.log(document.getElementById("restartBtn"));
+            document.getElementById("leaderboardHeader").innerHTML = leaderboardHeader;
             document.getElementById("restartBtn").innerHTML = btnRestart;
         });
     })
@@ -85,8 +82,6 @@ const loadLeaderboard = () => {
 
 const loadSummary = (score, maxLevel) => {
     sessionStorage.setItem("score", score);
-    console.log("score: ", score);
-
     $('.gameDashboard').load("./summary.html", () => {
         document.getElementById("summaryHeader").innerHTML = summaryHeader;
         document.getElementById("gameScoreLabel").innerHTML = summaryGameScore;
