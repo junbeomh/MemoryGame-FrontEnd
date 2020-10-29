@@ -1,6 +1,6 @@
 function Leaderboard() {
     this.getLeaders = () => {
-        fetch("http://localhost:3000/api/leaderboard", {
+        fetch(API + LEADERBOARD_ENDPOINT, {
             method: "GET",
             headers: {
                 "Content-Type": "text/plain"
@@ -9,7 +9,6 @@ function Leaderboard() {
             return response.json();
         }).then((payload) => {
             payload.forEach((data, index) => {
-                console.log(data);
                 let leaderboard = document.getElementById('leaderboardEntries');
                 let entry = document.createElement('div');
                 let rank = document.createElement('p');
