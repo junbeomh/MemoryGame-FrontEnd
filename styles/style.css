@@ -173,7 +173,7 @@ body {
 
 .dialog-button {
     width: 100px;
-    height: 40px;
+    height: 45px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -197,7 +197,7 @@ body {
 
 .summary, .leaderboard, .welcome, .confirmModal {
     position: relative;
-    padding: 20px;
+    padding: 40px;
     background-color: white;
     display: flex;
     flex-direction: column;
@@ -207,6 +207,8 @@ body {
     flex-direction: column;
     transition: visibility 0s opacity 0.5s;
     border-radius: 5px;
+    letter-spacing: 1.5px;
+    
 }
 
 .confirmModal.hide {
