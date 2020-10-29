@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Memory Game</title>
+    <link rel="shortcut icon" href="#" />
     <link rel="stylesheet" href="./styles/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -29,6 +30,12 @@
         <div id="gameMessage"> </div>
 
         <div class="gameDashboard board-active"></div>
+
+        <audio id="levelUp" src="./audio/level_up.mp3" preload="auto"></audio>
+        <audio id="levelFail" src="./audio/level_fail.mp3" preload="auto"></audio>
+        <audio id="gameOver" src="./audio/game_over.mp3" preload="auto"></audio>
+        <audio id="click" src="./audio/click.mp3" preload="auto"></audio>
+
     </div>
     <script src="./constants/strings.js"> </script>
     <script src="./js/uiLoader.js"></script>

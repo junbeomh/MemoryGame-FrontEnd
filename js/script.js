@@ -43,7 +43,7 @@ class Game {
         this.mistake = false;
         this.isStarted = false;
         this.clearGrid();
-        gameGrid.className = "gameGrid disableClick";
+        console.log('cleargrid called');
         setTimeout(() => { this.beginGameRound(); }, 1000);
     }
 
@@ -53,7 +53,7 @@ class Game {
         this.isStarted = true;
         this.mistake = false;
         gameGrid.innerHTML = "";
-        gameGrid.className = "gameGrid disableClick";
+        gameGrid.style.pointerEvents = "none";
         resetGameMessage();
     }
 
@@ -184,7 +184,6 @@ class Game {
                 this.totalScore += this.numbAnswers;
                 this.level.currLevel === this.level.maxLevel ? currLevel = this.level.maxLevel : this.level.currLevel++;
             }
-            gameGrid.style.pointerEvents = "none";
             if (this.answers.length != 0) { setTimeout(() => { this.showAnswers(); }, 1000); }
             setTimeout(() => { this.beginGameRound(); }, 3000);
         }
@@ -234,11 +233,11 @@ $('.restartBtn').click(function () {
 
 $('#quitBtn').click(function () {
     gameDashboard.classList.add('board-active');
-    loadConfirmModal(confirmQuit, confirmQuitHeader, confirmQuitMsg, function(){ return loadSummary(game.totalScore, game.level.currMax); }, hideConfirm);
+    loadConfirmModal(confirmQuit, confirmQuitHeader, confirmQuitMsg, function () { return loadSummary(game.totalScore, game.level.currMax); }, hideConfirm);
 });
 
 
 $('#submitBtn').click(function () {
     gameDashboard.classList.add('board-active');
-    loadConfirmModal(confirmSubmit, confirmSubmitHeader, confirmSubmitMsg, loadLeaderboard, function(){ return loadSummary(game.totalScore, game.level.currMax); });
+    loadConfirmModal(confirmSubmit, confirmSubmitHeader, confirmSubmitMsg, loadLeaderboard, function () { return loadSummary(game.totalScore, game.level.currMax); });
 });
