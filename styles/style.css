@@ -4,7 +4,7 @@
 }
 
 :root {
-    --colorMain: rgb(156, 156, 156);
+    --colorMain: rgb(175, 175, 175);
     --colorEmpahsis: rgb(177, 177, 177);
     --boxShadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
@@ -53,7 +53,7 @@ body {
     background-color: #3b3b3b;
 }
 
-.tileNum, .trialNum, .scoreNum  {
+.tileNum, .trialNum, .scoreNum {
     display: flex;
     padding: 10px;
     border: 2px solid var(--colorMain);
@@ -76,6 +76,40 @@ body {
     width: 60px;
 }
 
+@media only screen and (max-device-width: 480px) {
+    #tileNumLabel, #tileNumValue {
+        width: 50px;
+        display: flex;
+        justify-content: center;
+    }
+    #trialNumLabel, #trialNumValue {
+        width: 80px;
+        display: flex;
+        justify-content: center;
+        align-content: cen;
+    }
+    #scoreNumLabel, #scoreNumValue {
+        width: 55px;
+        display: flex;
+        justify-content: center;
+    }
+    .tileNum, .trialNum, .scoreNum {
+        display: flex;
+        flex-direction: column;
+        height: 68px;
+    }
+    #quitBtn {
+        height: 68px;
+        display: flex;
+        padding: 20px;
+    }
+    .scoreBoard {
+        margin-top: 15px;
+        height: 68px;
+        align-content: space-around;
+    }
+}
+
 #trialNumLabel, #tileNumLabel, #scoreNumLabel {
     text-align: left;
 }
@@ -93,12 +127,31 @@ body {
     text-shadow: 2px 2px 5px #252525;
 }
 
+@media only screen and (max-device-width: 480px) {
+    #gameMessage {
+        display: flex;
+        bottom: 10%;
+        position: absolute;
+        color: var(--colorMain);
+        letter-spacing: 1px;
+        text-shadow: 2px 2px 5px #252525;
+        padding: 30px;
+        text-align: center;
+    }
+}
+
 .gameBoard {
     padding: 50px 60px;
     border: 5px solid var(--colorMain);
     border-radius: 10px;
     -webkit-box-shadow: var(--boxShadow);
     box-shadow: var(--boxShadow);
+}
+
+@media only screen and (max-device-width: 480px) {
+    .gameBoard {
+        padding: 20px 30px;
+    }
 }
 
 .rotate {
@@ -115,10 +168,10 @@ body {
 .col {
     cursor: pointer;
     display: inline-block;
-    width: 8vw;
-    height: 8vw;
-    max-width: 70px;
-    max-height: 70px;
+    width: 10vw;
+    height: 10vw;
+    max-width: 60px;
+    max-height: 60px;
     margin: 3px;
     background-color: var(--colorEmpahsis);
     border-radius: 5px;
@@ -131,7 +184,7 @@ body {
     background: none;
 }
 
-.col.disable{
+.col.disable {
     pointer-events: none;
 }
 
@@ -208,13 +261,16 @@ body {
     transition: visibility 0s opacity 0.5s;
     border-radius: 5px;
     letter-spacing: 1.5px;
-    
+}
+
+.welcome, .confirmModal, .leaderboard {
+    margin: 15px
 }
 
 .confirmModal.hide {
     visibility: hidden;
     opacity: 0;
-    display: none;  
+    display: none;
 }
 
 .welcome.hide {
@@ -257,13 +313,13 @@ body {
     width: 150px;
 }
 
-#leaderboardEntries{
+#leaderboardEntries {
     display: flex;
     flex-direction: column;
     padding: 20px;
 }
 
-.leaderboardEntry{
+.leaderboardEntry {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -275,7 +331,6 @@ body {
     flex-direction: row;
     justify-content: space-evenly;
 }
-
 
 @-moz-keyframes spin {
     100% {
