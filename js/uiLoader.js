@@ -4,10 +4,10 @@ const makeScoreBoard = () => {
     for (let board of boardTypes) {
         const boardDiv = document.createElement("div");
         boardDiv.setAttribute("class", `${board}Num`);
-        const label = document.createElement("p");
+        const label = document.createElement("span");
         label.setAttribute("id", `${board}NumLabel`);
         label.innerHTML = `${board}`;
-        const value = document.createElement("p");
+        const value = document.createElement("span");
         value.setAttribute("id", `${board}NumValue`);
         boardDiv.appendChild(label);
         boardDiv.appendChild(value);
@@ -62,22 +62,45 @@ const loadConfirmModal = (type, header, msg, submitCallback, cancelCallback) => 
 const loadLeaderboard = () => {
     let score = sessionStorage.getItem("score");
     let name = sessionStorage.getItem("name");
+    var apigClient = apigClientFactory.newClient({
+        accessKey: AWS_ACCESS_KEY,
+        secretKey: AWS_SECRET_ACCESS_KEY,
+        region: AWS_REGION
+    });
 
-    fetch(API + ADD_USER_ENDPOINT, {
-        method: "POST",
+    var params = {
+        //This is where any header, path, or querystring request params go. The key is the parameter named as defined in the API
+        'name': name,
+        'score': score,
+    };
+    var body = {
+        //This is where you define the body of the request
+    };
+    var additionalParams = {
+        //If there are any unmodeled query parameters or headers that need to be sent with the request you can add them here
         headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
+
         },
-        body: new URLSearchParams({
+        queryParams: {
             'name': name,
             'score': score,
-        })
-    }).then(() => {
-        $('.gameDashboard').load("./leaderboard.html", () => {
-            document.getElementById("leaderboardHeader").innerHTML = leaderboardHeader;
-            document.getElementById("restartBtn").innerHTML = btnRestart;
+        }
+    };
+
+    apigClient.saveuserscorePost(params, body, additionalParams)
+        .then(function (result) {
+            console.log(result);
+
+            if (result.data === "success") {
+                $('.gameDashboard').load("./leaderboard.html", () => {
+                    document.getElementById("leaderboardHeader").innerHTML = leaderboardHeader;
+                    document.getElementById("restartBtn").innerHTML = btnRestart;
+                });
+            }
+
+        }).catch(function (result) {
+            console.log("error");
         });
-    })
 }
 
 const loadSummary = (score, maxLevel) => {

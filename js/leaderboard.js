@@ -1,13 +1,27 @@
 function Leaderboard() {
     this.getLeaders = () => {
-        fetch(API + LEADERBOARD_ENDPOINT, {
-            method: "GET",
+        var apigClient = apigClientFactory.newClient({
+            accessKey: AWS_ACCESS_KEY,
+            secretKey: AWS_SECRET_ACCESS_KEY,
+            region: AWS_REGION,
+        });
+        var params = {
+            //This is where any header, path, or querystring request params go. The key is the parameter named as defined in the API
+        };
+        var body = {
+            //This is where you define the body of the request
+        };
+        var additionalParams = {
+            //If there are any unmodeled query parameters or headers that need to be sent with the request you can add them here
             headers: {
-                "Content-Type": "text/plain"
             },
-        }).then((response) => {
-            return response.json();
-        }).then((payload) => {
+            queryParams: {
+            }
+        };
+
+        apigClient.scoreboardGet(params, body, additionalParams)
+        .then(function (result) {
+            console.log(result.data.body.Items);
             let leaderboard = document.getElementById('leaderboardEntries');
             let table = document.createElement("table");
             let tableHead = document.createElement("thead");
@@ -26,8 +40,7 @@ function Leaderboard() {
             table.setAttribute('class', 'table');
             table.appendChild(tableHead);
             table.appendChild(tableBody);
-
-            payload.forEach((data, index) => {
+            result.data.body.Items.forEach((data, index) => {
                 let row = document.createElement("tr");
                 let rank = document.createElement('td');
                 let name = document.createElement('td');
@@ -41,7 +54,8 @@ function Leaderboard() {
                 tableBody.appendChild(row);
             })
             leaderboard.appendChild(table);
-
+        }).catch(function (result) {
+            console.log("error");
         });
     }
 }
